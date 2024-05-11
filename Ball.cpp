@@ -2,8 +2,10 @@
 #include <cmath>
 #include <math.h>
 
-Ball::Ball(Point center, double radius, Velocity velocity, Color color)
-    : m_center(center), m_radius(radius), m_velocity(velocity), m_color(color)
+Ball::Ball(Point center, double radius, Velocity velocity,
+           Color color, bool isCollidable)
+    : m_center(center), m_radius(radius), m_velocity(velocity),
+      m_color(color), m_isCollidable(isCollidable)
 {}
 
 /**
@@ -66,4 +68,11 @@ double Ball::getRadius() const {
  */
 double Ball::getMass() const {
     return M_PI * std::pow(m_radius, 3) * 4 / 3;
+}
+
+/**
+ * @brief Возвращает флаг сталкиваемости объекта
+*/
+bool Ball::getIsCollidable() const {
+    return m_isCollidable;
 }
