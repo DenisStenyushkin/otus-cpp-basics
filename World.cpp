@@ -1,5 +1,8 @@
 #include "World.hpp"
 #include "Painter.hpp"
+#include "Color.hpp"
+#include "Point.hpp"
+#include <algorithm>
 #include <fstream>
 
 // Длительность одного тика симуляции.
@@ -7,11 +10,17 @@
 // Изменять не следует
 static constexpr double timePerTick = 0.001;
 
+static constexpr int numSparkles = 8;
+static constexpr double initialSparkleVelocityAbs = 100.0;
+static constexpr int initialSparkleRadius = 10;
+static constexpr double sparkleLifespan = 1.0;
+static const Color sparkleColor{ 255, 0, 0};
+
 /**
  * Конструирует объект мира для симуляции
  * @param worldFilePath путь к файлу модели мира
  */
-World::World(const std::string& worldFilePath) {
+World::World(const std::string& worldFilePath) : effects{timePerTick} {
 
     std::ifstream stream(worldFilePath);
     /**
@@ -80,6 +89,10 @@ void World::show(Painter& painter) const {
     for (const Ball& ball : balls) {
         ball.draw(painter);
     }
+
+    for (const Sparkle& sparkle : sparkles) {
+        sparkle.draw(painter);
+    }
 }
 
 /// @brief Обновляет состояние мира
@@ -104,5 +117,31 @@ void World::update(double time) {
     const auto ticks = static_cast<size_t>(std::floor(time / timePerTick));
     restTime = time - double(ticks) * timePerTick;
 
-    physics.update(balls, ticks);
+    std::vector<Point> collisionPoints = physics.update(balls, ticks);
+    
+    for (const auto& s : initiateSparkles(collisionPoints, numSparkles, initialSparkleVelocityAbs)) {
+        sparkles.push_back(s);
+    }
+    effects.update(sparkles, ticks);
+
+    sparkles.erase(std::remove_if(
+        sparkles.begin(), sparkles.end(),
+        [](const Sparkle& s) {
+            return s.getLifeSpan() <= 0;
+        }), sparkles.end());
+}
+
+std::vector<Sparkle> World::initiateSparkles(const std::vector<Point>& collisionPoints,
+                                             int numSparkles, double initialVelocityAbs) {
+    std::vector<Sparkle> sparkles;
+
+    for (const auto& p : collisionPoints) {
+        for (int i=0; i < numSparkles; ++i) {
+            Velocity v{ initialVelocityAbs, 360.0 * i / numSparkles };
+            sparkles.push_back(Sparkle{ p, initialSparkleRadius, v, sparkleColor,
+                                        sparkleLifespan });
+        }
+    }
+
+    return sparkles;
 }
