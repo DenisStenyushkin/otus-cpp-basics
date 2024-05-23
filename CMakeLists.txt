@@ -8,7 +8,7 @@ set_target_properties(random_shuffle PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQ
 add_executable(chrono_example chrono_example.cpp)
 set_target_properties(chrono_example PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
-add_executable(statistics statistics.cpp)
+add_executable(statistics statistics.cpp istatistics.hpp min.hpp max.hpp mean.hpp stddev.hpp)
 set_target_properties(statistics PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
 if(MSVC)
