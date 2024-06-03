@@ -5,11 +5,11 @@
 template<typename T>
 class SerialContainer : public IContainer<T>
 {
-private:
+protected:
     T* elems;
     size_t sz;
 
-    void allocate_new_storage() {
+    virtual void allocate_new_storage() {
         T* new_elems = new T[sz + 1];
 
         for (size_t i = 0; i < sz; ++i) {
@@ -21,7 +21,7 @@ private:
         ++sz;
     }
 
-    void trim_storage() {
+    virtual void trim_storage() {
         --sz;
         T* new_elems = new T[sz];
 
@@ -32,6 +32,7 @@ private:
         delete [] elems;
         elems = new_elems;
     }
+
 public:
     SerialContainer() : elems{nullptr}, sz{0} {}
 

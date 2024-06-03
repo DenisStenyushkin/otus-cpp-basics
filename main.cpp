@@ -3,6 +3,7 @@
 #include "IContainer.hpp"
 #include "SerialContainer.hpp"
 #include "LinkedListContainer.hpp"
+#include "ReservingSerialContainer.hpp"
 
 
 void fillContainer(IContainer<int>& c) {
@@ -48,17 +49,23 @@ void testContainer(IContainer<int>& c) {
 }
 
 int main() {
-    std::cout << "***********************\n";
-    std::cout << "*** SerialContainer ***\n";
-    SerialContainer<int> c1;
-    std::cout << "***********************\n";
-    testContainer(c1);
+    // std::cout << "***********************\n";
+    // std::cout << "*** SerialContainer ***\n";
+    // SerialContainer<int> c1;
+    // std::cout << "***********************\n";
+    // testContainer(c1);
 
-    std::cout << "***************************\n";
-    std::cout << "*** LinkedListContainer ***\n";
-    std::cout << "***************************\n";
-    LinkedListContainer<int> c2;
-    testContainer(c2);
+    // std::cout << "***************************\n";
+    // std::cout << "*** LinkedListContainer ***\n";
+    // std::cout << "***************************\n";
+    // LinkedListContainer<int> c2;
+    // testContainer(c2);
+
+    std::cout << "********************************\n";
+    std::cout << "*** ReservingSerialContainer ***\n";
+    ReservingSerialContainer<int> c3{1.5};
+    std::cout << "********************************\n";
+    testContainer(c3);
 
     return 0;
 }
