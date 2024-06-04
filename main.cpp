@@ -56,23 +56,28 @@ int main() {
     std::cout << "***********************\n";
     testContainer(c1);
 
-    std::cout << "***************************\n";
-    std::cout << "*** LinkedListContainer ***\n";
-    std::cout << "***************************\n";
-    LinkedListContainer<int> c2;
-    testContainer(c2);
+    SerialContainer<int> c1_1{std::move(c1)};
+    SerialContainer<int> c1_2;
+    c1_2 = std::move(c1);
 
-    std::cout << "********************************\n";
-    std::cout << "*** ReservingSerialContainer ***\n";
-    ReservingSerialContainer<int> c3{1.5};
-    std::cout << "********************************\n";
-    testContainer(c3);
 
-    std::cout << "*********************************\n";
-    std::cout << "*** DoubleLinkedListContainer ***\n";
-    DoubleLinkedListContainer<int> c4;
-    std::cout << "*********************************\n";
-    testContainer(c4);
+    // std::cout << "***************************\n";
+    // std::cout << "*** LinkedListContainer ***\n";
+    // std::cout << "***************************\n";
+    // LinkedListContainer<int> c2;
+    // testContainer(c2);
+
+    // std::cout << "********************************\n";
+    // std::cout << "*** ReservingSerialContainer ***\n";
+    // ReservingSerialContainer<int> c3{1.5};
+    // std::cout << "********************************\n";
+    // testContainer(c3);
+
+    // std::cout << "*********************************\n";
+    // std::cout << "*** DoubleLinkedListContainer ***\n";
+    // DoubleLinkedListContainer<int> c4;
+    // std::cout << "*********************************\n";
+    // testContainer(c4);
 
     return 0;
 }

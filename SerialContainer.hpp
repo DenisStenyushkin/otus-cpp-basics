@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "IContainer.hpp"
 
 template<typename T>
@@ -36,10 +37,28 @@ protected:
 public:
     SerialContainer() : elems{nullptr}, sz{0} {}
 
+    SerialContainer(SerialContainer&& c) : elems{c.elems}, sz{c.sz} {
+        std::cout << "Move constructor\n";
+        c.elems = nullptr;
+        c.sz = 0;
+    }
+
     ~SerialContainer() override {
         delete [] elems;
         elems = nullptr;
         sz = 0;
+    }
+
+    SerialContainer& operator=(SerialContainer&& c) {
+        std::cout << "Move assignment\n";
+
+        elems = c.elems;
+        sz = c.sz;
+
+        c.elems = nullptr;
+        c.sz = 0;
+
+        return *this;
     }
 
     void push_back(const T& v) override {
