@@ -7,7 +7,8 @@ add_executable(main
                IContainer.hpp
                SerialContainer.hpp
                LinkedListContainer.hpp
-               ReservingSerialContainer.hpp)
+               ReservingSerialContainer.hpp
+               DoubleLinkedListContainer.hpp)
 
 set_target_properties(main 
                       PROPERTIES CXX_STANDARD 17 
