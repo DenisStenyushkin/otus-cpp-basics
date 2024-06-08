@@ -22,6 +22,16 @@ void printContainer(const char* prologue, IContainer<int>& c,
     std::cout << epilogue;
 }
 
+void printContainerWithIterator(const char* prologue,
+                                LinkedListContainer<int>& c,
+                                const char* epilogue) {
+    std::cout << prologue;
+    for (auto i = c.begin(), end = c.end(); i != end; ++i) {
+        std::cout << *i << " ";
+    }
+    std::cout << epilogue;
+}
+
 void testContainer(IContainer<int>& c) {
     fillContainer(c);
     printContainer("Container initialized:\t", c,
@@ -69,6 +79,8 @@ int main() {
     std::cout << "***************************\n";
     LinkedListContainer<int> c2;
     testContainer(c2);
+
+    printContainerWithIterator("Container via iterator: ", c2, "\n\n");
 
     std::cout << "********************************\n";
     std::cout << "*** ReservingSerialContainer ***\n";

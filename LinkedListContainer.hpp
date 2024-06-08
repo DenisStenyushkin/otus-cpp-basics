@@ -39,6 +39,51 @@ private:
         return ptr;
     }
 public:
+    // template<typename T>
+    struct Iterator
+    {
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using difference_type = std::ptrdiff_t;
+        using value_type = T;
+        using pointer = T*;
+        using reference = T&;
+
+        explicit Iterator() : m_ptr{nullptr} {}
+        explicit Iterator(Node* ptr) : m_ptr{ptr} {}
+
+        reference operator*() {
+            return m_ptr->value;
+        }
+
+        pointer operator->() {
+            return &(m_ptr->value);
+        }
+
+        Iterator& operator++() {
+            m_ptr = m_ptr->next;
+            return *this;
+        }
+
+        Iterator operator++(int) {
+            Iterator t = *this;
+            m_ptr = m_ptr->next;
+            return t;
+        }
+
+        friend bool operator==(const Iterator& it1, const Iterator& it2) {
+            return it1.m_ptr == it2.m_ptr;
+        }
+
+        friend bool operator!=(const Iterator& it1, const Iterator& it2) {
+            return it1.m_ptr != it2.m_ptr;
+        }
+
+    private:
+        Node* m_ptr;
+    };
+    
+
     LinkedListContainer() : head{nullptr} {}
     
     ~LinkedListContainer() override {
@@ -104,5 +149,13 @@ public:
         }
         Node* t = findElementBeforePos(pos);
         return t->next->value;
+    }
+
+    Iterator begin() {
+        return Iterator(head);
+    }
+
+    Iterator end() {
+        return Iterator(nullptr);
     }
 };
