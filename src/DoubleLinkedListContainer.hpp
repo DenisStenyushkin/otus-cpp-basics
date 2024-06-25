@@ -84,6 +84,12 @@ public:
             Node* t = new Node{nullptr, head, v};
             head = t;
         }
+        else if (pos == size()) {
+            Node* elemBefore = findElementAtPos(pos-1);
+            Node* t = new Node{elemBefore, nullptr, v};
+
+            elemBefore->next = t;
+        }
         else {
             Node* elemAtPos = findElementAtPos(pos);
             Node* elemBefore = elemAtPos->prev;
@@ -95,13 +101,21 @@ public:
     }
 
     void erase(size_t pos) override {
-        Node* elem = findElementAtPos(pos);
+        Node* elem;
 
-        if (elem->prev != nullptr) {
-            elem->prev->next = elem->next;
+        if (pos == 0) {
+            elem = head;
+            head = elem->next;
         }
-        if (elem->next != nullptr) {
-            elem->next->prev = elem->prev;
+        else {
+            elem = findElementAtPos(pos);
+
+            if (elem->prev != nullptr) {
+                elem->prev->next = elem->next;
+            }
+            if (elem->next != nullptr) {
+                elem->next->prev = elem->prev;
+            }
         }
 
         delete elem;

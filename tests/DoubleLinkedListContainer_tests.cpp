@@ -1,13 +1,13 @@
 #include <cstddef>
 #include <vector>
 
-#include "SerialContainer.hpp"
+#include "DoubleLinkedListContainer.hpp"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 
-struct SerialContainerFixture : public testing::Test {
-    SerialContainer<int> c;
+struct DoubleLinkedListContainerFixture : public testing::Test {
+    DoubleLinkedListContainer<int> c;
 
     void SetUp() override {
         for (int i = 0; i < 5; ++i) {
@@ -24,6 +24,8 @@ struct SerialContainerFixture : public testing::Test {
 };
 
 struct MockElement {
+    MockElement() {}
+    MockElement(const MockElement& e) {}
     MockElement& operator=(const MockElement& other) { return *this; }
 
     MOCK_METHOD(void, die, ());
@@ -31,81 +33,60 @@ struct MockElement {
 };
 
 
-TEST(SerialContainer, CtorOk) {
-    SerialContainer<int> c1;
-    SerialContainer<float> c2;
+TEST(DoubleLinkedListContainer, CtorOk) {
+    DoubleLinkedListContainer<int> c1;
+    DoubleLinkedListContainer<float> c2;
 
     ASSERT_EQ(c1.size(), 0);
     ASSERT_EQ(c2.size(), 0);
 }
 
-TEST_F(SerialContainerFixture, PushBackOk) {
+TEST_F(DoubleLinkedListContainerFixture, PushBackOk) {
     c.push_back(6);
     AssertEqualsToVector(std::vector<int>{1, 2, 3, 4, 5, 6});
 }
 
-TEST_F(SerialContainerFixture, InsertIntoBeginningOk) {
+TEST_F(DoubleLinkedListContainerFixture, InsertIntoBeginningOk) {
     c.insert(0, 0);
     AssertEqualsToVector(std::vector<int>{0, 1, 2, 3, 4, 5});
 }
 
-TEST_F(SerialContainerFixture, InsertIntoCenterOk) {
+TEST_F(DoubleLinkedListContainerFixture, InsertIntoCenterOk) {
     c.insert(c.size()/2, 0);
     AssertEqualsToVector(std::vector<int>{1, 2, 0, 3, 4, 5});
 }
 
-TEST_F(SerialContainerFixture, InsertIntoEndOk) {
+TEST_F(DoubleLinkedListContainerFixture, InsertIntoEndOk) {
     c.insert(c.size(), 0);
     AssertEqualsToVector(std::vector<int>{1, 2, 3, 4, 5, 0});
 }
 
-TEST_F(SerialContainerFixture, EraseAtBegginningOk) {
+TEST_F(DoubleLinkedListContainerFixture, EraseAtBegginningOk) {
     c.erase(0);
     AssertEqualsToVector(std::vector<int>{2, 3, 4, 5});
 }
 
-TEST_F(SerialContainerFixture, EraseAtCenterOk) {
+TEST_F(DoubleLinkedListContainerFixture, EraseAtCenterOk) {
     c.erase(c.size()/2);
     AssertEqualsToVector(std::vector<int>{1, 2, 4, 5});
 }
 
-TEST_F(SerialContainerFixture, EraseAtEndOk) {
+TEST_F(DoubleLinkedListContainerFixture, EraseAtEndOk) {
     c.erase(c.size()-1);
     AssertEqualsToVector(std::vector<int>{1, 2, 3, 4});
 }
 
-TEST_F(SerialContainerFixture, SizeOk) {
+TEST_F(DoubleLinkedListContainerFixture, SizeOk) {
     ASSERT_EQ(c.size(), 5);
 }
 
-TEST_F(SerialContainerFixture, ElementAssignmentOk) {
+TEST_F(DoubleLinkedListContainerFixture, ElementAssignmentOk) {
     c[1] = 100;
     AssertEqualsToVector(std::vector<int>{1, 100, 3, 4 ,5});
 }
 
-TEST_F(SerialContainerFixture, MoveCtorOk) {
-    SerialContainer<int> c2{std::move(c)};
-    ASSERT_EQ(c.size(), 0);
-
-    ASSERT_EQ(c2.size(), 5);
-    for (size_t i = 0; i < c.size(); ++i) {
-        ASSERT_EQ(c2[i], i+1);
-    }
-}
-
-TEST_F(SerialContainerFixture, MoveAssignmentOk) {
-    SerialContainer<int> c2;
-    c2 = std::move(c);
-    ASSERT_EQ(c.size(), 0);
-
-    ASSERT_EQ(c2.size(), 5);
-    for (size_t i = 0; i < c.size(); ++i) {
-        ASSERT_EQ(c2[i], i+1);
-    }
-}
-
-TEST(MockElement, DtorOk) {
-    SerialContainer<MockElement> c;
+TEST(MockElementDDL, DtorOk) {
+    DoubleLinkedListContainer<MockElement> c;
 
     MockElement e1;
     EXPECT_CALL(e1, die()).Times(1);
