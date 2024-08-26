@@ -70,7 +70,7 @@ std::string tolower(const std::string &str) {
 Counter count_words(const std::string& file_name) {
     std::ifstream input{file_name};
         if (!input.is_open()) {
-            throw "Failed to open file " + file_name + "\n";
+            throw std::runtime_error("Failed to open file " + file_name + "\n");
         }
     
     Counter counter;
